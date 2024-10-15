@@ -1,11 +1,10 @@
 import React from 'react'
 
-function ContactUs() {
+function Property() {
     return (
         <>
-
         </>
     )
 }
 
-export default ContactUs
+export default Property
