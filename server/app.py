@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token,JWTManager, create_refresh_token, jwt_required, get_jwt_identity, current_user, verify_jwt_in_request, get_jwt
 from datetime import timezone
 import datetime
+from functools import wraps
 
 from config import app, db, api
 
@@ -13,6 +14,21 @@ jwt = JWTManager(app)
 
 #  creating a custom hook that helps in knowing the roles of either the buyer or the administrator
 # a method called allow that uses the user roles and give users certain rights to access certain endpoints
+
+def allow(*roles):
+    def wrapper(fn):
+        @wraps(fn)
+        def decorator(*args, **kwargs):  
+            user_roles = [role.user_role for role in current_user.roles]
+            for user_role in user_roles:
+                if user_role in roles:
+                    return fn(*args, **kwargs)
+            else:
+                return {"msg":"Not Authorized !"}, 403
+
+        return decorator
+
+    return wrapper
 
 
 @jwt.user_lookup_loader
@@ -39,18 +55,28 @@ class Home(Resource):
 # creating Property Resource
 class Properties(Resource):
     #  a method to get all properties
-    @jwt_required()
+    # @jwt_required()
     def get(self):
-        # querying the database to get a list of all the properties
+        # Querying the database to get a list of all properties
         properties = Property.query.all()
-        # Looping through properties and getting a property as a dictionary using to_dict() method
-        property_dict = [property1.to_dict(rules=("-reviews", )) for property1 in properties]
-        # creating and making a response
-        response = make_response(property_dict, 200)
+
+        # Looping through properties and getting a property as a dictionary
+        property_list = []
+        for property1 in properties:
+            property_dict = property1.to_dict(rules=("-buyers",))
+            property_dict['images'] = [image.name for image in property1.images]
+            property_dict['features'] = [feature.name for feature in property1.features]
+            property_dict['infrastructures'] = [infrastructure.name for infrastructure in property1.infrastructures]
+            property_list.append(property_dict)
+
+        # Creating and making a response
+        response = make_response(property_list, 200)
         return response
     
-    # @jwt_required()
+    
     #  a method to post a property
+    @jwt_required()
+    @allow("admin")
     def post(self):
         # getting the price of the property based on the request
         data = request.get_json()
@@ -89,17 +115,23 @@ class Properties(Resource):
 class PropertyById(Resource):
     #  a method to get one property
     def get(self, id):
-        # querying and filtering the database using the id
-        property1 = Property.query.filter_by(id = id).first()
+        # Querying and filtering the database using the id
+        property1 = Property.query.filter_by(id=id).first()
         if property1:
-            #  creating a property dict using the to_dict method
-            property1_dict = property1.to_dict(rules=("-reviews", ))
-            # creating and making a response
+            # Creating a property dict using the to_dict method
+            property1_dict = property1.to_dict()
+            
+            # Adding images, features, and infrastructures to the property dict
+            property1_dict['images'] = [image.name for image in property1.images]
+            property1_dict['features'] = [feature.name for feature in property1.features]
+            property1_dict['infrastructures'] = [infrastructure.name for infrastructure in property1.infrastructures]
+
+            # Creating and making a response
             response = make_response(property1_dict, 200)
             return response
         else:
-            #  creating and returning a response based on the response body
-            response_body = {"error": "Property  not found"}
+            # Creating and returning a response for a property not found
+            response_body = {"error": "Property not found"}
             response = make_response(response_body, 404)
             return response
 
@@ -359,5 +391,3 @@ api.add_resource(Logout, "/logout", endpoint = "/logout")
 
 if __name__ == "__main__":
     app.run(debug = True, port = 5555)
-
-

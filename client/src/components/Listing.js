@@ -94,11 +94,5 @@ const Listing = ({ comparison = false, property = '' }) => {
         </div>
     );
 };
-<<<<<<< HEAD
 
 export default Listing;
-
-=======
-
-export default Listing;
->>>>>>> 39377fcd88ceed834e00871b6cebb49cb82b97c7

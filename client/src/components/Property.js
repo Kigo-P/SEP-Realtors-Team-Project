@@ -11,7 +11,8 @@ const Property = () => {
     const fetchProperty = async () => {
       try {
         setIsLoading(true)
-        const res = await fetch(`/properties/${id}`)  // Fetch property by id
+        const res = await fetch(`/properties/${id}`); // Fetch property by id
+
         if (!res.ok) {
           console.log('Error fetching Property')
         }
