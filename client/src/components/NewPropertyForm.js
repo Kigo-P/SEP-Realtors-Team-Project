@@ -10,9 +10,11 @@ function NewPropertyForm() {
         price: '',
         location: '',
         infrastructure: '',
-        bedrooms: '0',
-        washrooms: '0',
-        powderRooms: 'No',
+        features: {
+            bedrooms: '0',
+            washrooms: '1',
+            powderRooms: 'No',
+        },
         propertyType: '',
         additionalFeatures: [], 
     });
@@ -71,7 +73,7 @@ function NewPropertyForm() {
     useEffect(() => {
         if (isSubmitting) {
             const timer = setTimeout(() => {
-                fetch("/properties", {
+                fetch("http://127.0.0.1:5555/properties", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -178,49 +180,48 @@ function NewPropertyForm() {
                     />
                 </div>
 
-                <div className="form-row">
-                    <div className="form-group">
-                        <label htmlFor="bedrooms">Bedrooms <span className="required-star">*</span></label>
-                        <select
-                            id="bedrooms"
-                            name="bedrooms"
-                            value={formData.bedrooms}
-                            onChange={handleChange}
-                            required
-                        >
-                            {[...Array(7)].map((_, i) => (
-                                <option key={i} value={i}>{i}</option>
-                            ))}
-                        </select>
-                    </div>
+                <div className="form-group">
+                    <label>Features</label>
+                    <div className="form-row">
+                        <div className="form-group">
+                            <label htmlFor="bedrooms">Bedrooms <span className="required-star">*</span></label>
+                            <input
+                                type="number"
+                                id="bedrooms"
+                                name="bedrooms"
+                                value={formData.features.bedrooms}
+                                onChange={(e) => handleFeatureChange('bedrooms', e.target.value)}
+                                min="0"
+                                required
+                            />
+                        </div>
 
-                    <div className="form-group">
-                        <label htmlFor="washrooms">Washrooms <span className="required-star">*</span></label>
-                        <select
-                            id="washrooms"
-                            name="washrooms"
-                            value={formData.washrooms}
-                            onChange={handleChange}
-                            required
-                        >
-                            {[...Array(7)].map((_, i) => (
-                                <option key={i} value={i}>{i}</option>
-                            ))}
-                        </select>
-                    </div>
+                        <div className="form-group">
+                            <label htmlFor="washrooms">Washrooms <span className="required-star">*</span></label>
+                            <input
+                                type="number"
+                                id="washrooms"
+                                name="washrooms"
+                                value={formData.features.washrooms}
+                                onChange={(e) => handleFeatureChange('washrooms', e.target.value)}
+                                min="0"
+                                required
+                            />
+                        </div>
 
-                    <div className="form-group">
-                        <label htmlFor="powderRooms">Powder Rooms <span className="required-star">*</span></label>
-                        <select
-                            id="powderRooms"
-                            name="powderRooms"
-                            value={formData.powderRooms}
-                            onChange={handleChange}
-                            required
-                        >
-                            <option value="No">No</option>
-                            <option value="Yes">Yes</option>
-                        </select>
+                        <div className="form-group">
+                            <label htmlFor="powderRooms">Powder Rooms <span className="required-star">*</span></label>
+                            <select
+                                id="powderRooms"
+                                name="powderRooms"
+                                value={formData.features.powderRooms}
+                                onChange={(e) => handleFeatureChange('powderRooms', e.target.value)}
+                                required
+                            >
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
@@ -269,5 +270,6 @@ function NewPropertyForm() {
         </div>
     );
 }
+
 
 export default NewPropertyForm
