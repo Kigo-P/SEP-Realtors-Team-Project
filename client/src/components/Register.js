@@ -111,4 +111,8 @@ function Register() {
   );
 }
 
+<<<<<<< HEAD
 export default Register;
+=======
+export default Register;
+>>>>>>> 39377fcd88ceed834e00871b6cebb49cb82b97c7
