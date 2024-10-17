@@ -391,5 +391,3 @@ api.add_resource(Logout, "/logout", endpoint = "/logout")
 
 if __name__ == "__main__":
     app.run(debug = True, port = 5555)
-
-
