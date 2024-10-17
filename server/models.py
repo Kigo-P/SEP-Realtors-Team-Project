@@ -110,6 +110,13 @@ class Property(db.Model, SerializerMixin):
     # setting serialization rules
     serialize_rules = ("-buyers.buyer_properties", "-reviews.property", )
 
+    #  validating the price of the property to be a positive number
+    @validates("price")
+    def validates_price(self, key, price):
+        if price < 1 :
+            raise ValueError ("Price must be between greater than 1")
+        return price
+
 
     #  creating a string version using repr
     def __repr__(self):
@@ -136,7 +143,11 @@ class Review(db.Model, SerializerMixin):
     # setting serialization rules
     serialize_rules = ("-buyer.reviews", "-property.reviews", )
     
-
+#  creating a model called TokenBlocklist that will be responsible when the user logs out
+class TokenBlocklist(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    jti = db.Column(db.String(36), nullable=False, index=True)
+    created_at = db.Column(db.DateTime, nullable=False)
     
     
 
