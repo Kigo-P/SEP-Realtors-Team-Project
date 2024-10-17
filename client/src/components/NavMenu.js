@@ -22,5 +22,9 @@ function NavMenu() {
     );
 }
 
+<<<<<<< HEAD
 export default NavMenu;
 
+=======
+export default NavMenu;
+>>>>>>> 39377fcd88ceed834e00871b6cebb49cb82b97c7
