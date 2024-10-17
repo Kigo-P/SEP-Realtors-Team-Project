@@ -112,7 +112,7 @@ class Property(db.Model, SerializerMixin):
 
 
     # setting serialization rules
-    serialize_rules = ("-buyers.buyer_properties", )
+    serialize_rules = ("-buyers.buyer_properties","-features.property1","-images.property1", "-infrastructures.property1", )
 
     #  validating the price of the property to be a positive number
     @validates("price")

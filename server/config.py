@@ -14,7 +14,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'MLAPUV'
-app.config['JWT_ACCESS_TOKEN_EXPIRES']=timedelta(minutes=10)
+app.config['JWT_ACCESS_TOKEN_EXPIRES']=timedelta(minutes=30)
 app.config['JWT_ACCESS_REFRESH_EXPIRES']=timedelta(days=30)
 app.json.compact = False
 

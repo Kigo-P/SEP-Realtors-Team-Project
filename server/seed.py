@@ -54,7 +54,6 @@ with app.app_context():
         Feature(name="Backyard", property_id=2),
         Feature(name="Smart Home Technology", property_id=3)
     ]
-<<<<<<< HEAD
 
     db.session.add_all(features)
     db.session.commit()
@@ -71,24 +70,6 @@ with app.app_context():
     db.session.add_all(images)
     db.session.commit()
 
-=======
-
-    db.session.add_all(features)
-    db.session.commit()
-
-    # Create Image instances
-    images = [
-        Image(name="Luxury Apartment Image", property_id=1),
-        Image(name="Cozy Cottage Image", property_id=2),
-        Image(name="Modern Villa Image", property_id=3),
-        Image(name="Charming Bungalow Image", property_id=4),
-        Image(name="Stylish Penthouse Image", property_id=5)
-    ]
-
-    db.session.add_all(images)
-    db.session.commit()
-
->>>>>>> 39377fcd88ceed834e00871b6cebb49cb82b97c7
     # Create Infrastructure instances
     infrastructures = [
         Infrastructure(name="Elevator", property_id=1),
@@ -106,11 +87,8 @@ with app.app_context():
 
 
 
-<<<<<<< HEAD
 
 
 
 
 
-=======
->>>>>>> 39377fcd88ceed834e00871b6cebb49cb82b97c7
