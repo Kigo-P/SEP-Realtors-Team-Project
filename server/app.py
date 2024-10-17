@@ -1,6 +1,6 @@
 from flask import request, session, make_response,jsonify
 from flask_restful import Resource
-from models import Property, User, Admin, Buyer, Review, TokenBlocklist
+from models import Property, User, Admin, Buyer, TokenBlocklist
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token,JWTManager, create_refresh_token, jwt_required, get_jwt_identity, current_user, verify_jwt_in_request, get_jwt
 from datetime import timezone

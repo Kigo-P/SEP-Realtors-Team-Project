@@ -23,7 +23,7 @@ class User(db.Model, SerializerMixin):
     first_name = db.Column(db.String(32), nullable = False)
     last_name = db.Column(db.String(32), nullable = False)
     email = db.Column(db.String(32), unique = True, nullable = False)
-    password = db.Column(db.String(32), nullable = False, unique = True)
+    password = db.Column(db.String(32), nullable = False)
     contact = db.Column(db.Integer(), nullable=False)
     user_role = db.Column(db.String(), nullable = False)
 
@@ -46,7 +46,7 @@ class Admin(db.Model, SerializerMixin):
     # creating columns
     id = db.Column(db.Integer, primary_key = True)
     email = db.Column(db.String(32), unique = True, nullable = False)
-    password = db.Column(db.String(32), nullable = False, unique = True)
+    password = db.Column(db.String(32), nullable = False)
     #  Foreign key from the user_id
     user_id = db.Column(db.Integer(), db.ForeignKey("users.id"))
 
@@ -67,7 +67,7 @@ class Buyer(db.Model, SerializerMixin):
     # creating columns
     id = db.Column(db.Integer, primary_key = True)
     email = db.Column(db.String(32), unique = True, nullable = False)
-    password = db.Column(db.String(32), nullable = False, unique = True)
+    password = db.Column(db.String(32), nullable = False)
     #  Foreign key from the user_id
     user_id = db.Column(db.Integer(), db.ForeignKey("users.id"))
 
@@ -75,11 +75,10 @@ class Buyer(db.Model, SerializerMixin):
     user = db.relationship("User", back_populates="buyer")
     #  Relationship mapping the buyers to the properties
     properties = db.relationship("Property", secondary= "buyers_properties", back_populates="buyers")
-    #  Relationship mapping the buyers to the reviews
-    reviews = db.relationship("Review", back_populates="buyer", cascade="all, delete-orphan")
+
 
     # setting serialization rules
-    serialize_rules = ("-user.buyer", "-properties.buyer_properties","-reviews.buyer", )
+    serialize_rules = ("-user.buyer", "-properties.buyer_properties", )
 
     #  creating a string version using repr
     def __repr__(self):
@@ -95,20 +94,22 @@ class Property(db.Model, SerializerMixin):
     price = db.Column(db.Integer(), nullable = False)
     description = db.Column(db.String(64), nullable = False)
     location = db.Column(db.String(32), nullable = False)
-    infrastructure = db.Column(db.String(256), nullable = False)
-    features = db.Column(db.String(32), nullable = False)
-    additional_features = db.Column(db.String(512), nullable = False)
     property_type = db.Column(db.String(64), nullable = False)
-    image = db.Column(db.String(), nullable = False)
+    # Relationship mapping the property to the features
+    features = db.relationship("Feature", back_populates="property1", cascade="all, delete-orphan")
+    # Relationship mapping the property to the images
+    images = db.relationship("Image", back_populates="property1", cascade="all, delete-orphan")
+    # Relationship mapping the property to the images
+    infrastructures = db.relationship("Infrastructure", back_populates="property1", cascade="all, delete-orphan")
+
 
 
     #  Relationship mapping the properties to the buyers
     buyers = db.relationship("Buyer", secondary= "buyers_properties", back_populates="properties")
-    #  Relationship mapping the property to the reviews
-    reviews = db.relationship("Review",  back_populates="property", cascade="all, delete-orphan")
+
 
     # setting serialization rules
-    serialize_rules = ("-buyers.buyer_properties", "-reviews.property", )
+    serialize_rules = ("-buyers.buyer_properties", )
 
     #  validating the price of the property to be a positive number
     @validates("price")
@@ -123,25 +124,51 @@ class Property(db.Model, SerializerMixin):
         return f"<Property {self.id}: {self.title}, {self.price} ,{self.location}, {self.property_type}  has been created>"
     
 
-#  creating a model called Review with a table name of reviews- The buyer and properties have a many to many relationship through Review
-class Review(db.Model, SerializerMixin):
-    __tablename__ = "reviews"
+#  creating a Feature Model
+class Feature(db.Model):
+    __tablename__ = "features"
 
     # creating columns
     id = db.Column(db.Integer, primary_key = True)
-    comment = db.Column(db.String(64))
-    #  Foreign key from the buyer_id
-    buyer_id = db.Column(db.Integer(), db.ForeignKey("buyers.id"))
-    #  Foreign key from the property_id
-    property_id = db.Column(db.Integer(), db.ForeignKey("properties.id"))
+    name = db.Column(db.String(256), nullable = False)
+    # Foreign Key from the property id
+    property_id = db.Column(db.Integer, db.ForeignKey("properties.id"))
 
-    # a relationship that maps the reviews to the buyer
-    buyer = db.relationship("Buyer", back_populates = "reviews")
-    #  a relationship that maps the reviews to the property
-    property = db.relationship("Property", back_populates = "reviews")
+    #  a relationship that maps the features to the property
+    property1 = db.relationship("Property", back_populates="features") 
 
-    # setting serialization rules
-    serialize_rules = ("-buyer.reviews", "-property.reviews", )
+    pass
+
+#  creating an Image Model
+class Image(db.Model):
+    __tablename__ = "images"
+
+    # creating columns
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(256), nullable = False)
+    # Foreign Key from the property id
+    property_id = db.Column(db.Integer, db.ForeignKey("properties.id"))
+
+    #  a relationship that maps the features to the property
+    property1 = db.relationship("Property", back_populates="images") 
+
+    pass
+
+#  creating an Infrastructure Model
+class Infrastructure(db.Model):
+    __tablename__ = "infrastructures"
+
+    # creating columns
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(256), nullable = False)
+    # Foreign Key from the property id
+    property_id = db.Column(db.Integer, db.ForeignKey("properties.id"))
+
+    #  a relationship that maps the features to the property
+    property1 = db.relationship("Property", back_populates="infrastructures") 
+
+    pass
+
     
 #  creating a model called TokenBlocklist that will be responsible when the user logs out
 class TokenBlocklist(db.Model):
