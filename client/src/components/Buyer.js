@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Header from './Header'; // Import Header
+import Footer from './Footer'; // Import Footer
 
 const BuyerPage = ({ buyerName }) => {
     const [activeTab, setActiveTab] = useState('dashboard');
@@ -25,14 +27,12 @@ const BuyerPage = ({ buyerName }) => {
     }, [activeTab]);
 
     const handleBuyProperty = (propertyId) => {
-        // Handle the "Buy" action
         fetch(`/api/buy-property/${propertyId}`, {
             method: 'POST',
         })
             .then(response => response.json())
             .then(data => {
                 console.log('Property bought successfully:', data);
-                // Optionally refresh bought properties or show a message
             })
             .catch(error => console.error('Error buying property:', error));
     };
@@ -85,20 +85,29 @@ const BuyerPage = ({ buyerName }) => {
 
     return (
         <div className="buyer-page">
-            <div className="sidebar">
-                <ul>
-                    <li onClick={() => setActiveTab('dashboard')}>Dashboard</li>
-                    <li onClick={() => setActiveTab('boughtProperties')}>List of Bought Properties</li>
-                    <li onClick={() => setActiveTab('properties')}>Properties</li>
-                </ul>
+            <Header /> 
+            <div className="content">
+                <div className="sidebar">
+                    <ul>
+                        <li onClick={() => setActiveTab('dashboard')}>Dashboard</li>
+                        <li onClick={() => setActiveTab('boughtProperties')}>List of Bought Properties</li>
+                        <li onClick={() => setActiveTab('properties')}>Properties</li>
+                    </ul>
+                </div>
+                <div className="dashboard">
+                    {renderContent()}
+                </div>
             </div>
-            <div className="dashboard">
-                {renderContent()}
-            </div>
-
+            <Footer /> 
             <style jsx>{`
                 .buyer-page {
                     display: flex;
+                    flex-direction: column;
+                    min-height: 100vh;
+                }
+                .content {
+                    display: flex;
+                    flex: 1;
                 }
                 .sidebar {
                     width: 250px;
@@ -127,6 +136,21 @@ const BuyerPage = ({ buyerName }) => {
                     background-color: #f9f9f9;
                     padding: 20px;
                     border-radius: 8px;
+                }
+                header {
+                    background-color: #007BFF;
+                    color: white;
+                    padding: 10px;
+                    text-align: center;
+                }
+                footer {
+                    background-color: #007BFF;
+                    color: white;
+                    padding: 10px;
+                    text-align: center;
+                    position: relative;
+                    bottom: 0;
+                    width: 100%;
                 }
             `}</style>
         </div>
