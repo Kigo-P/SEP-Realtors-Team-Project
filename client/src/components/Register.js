@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import NavMenu from './NavMenu';
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -85,7 +86,9 @@ function Register() {
   };
 
   return (
+    
     <div className="form-container">
+      <NavMenu />
       <h2>Register</h2>
       <form onSubmit={handleSubmit}>
         <input
