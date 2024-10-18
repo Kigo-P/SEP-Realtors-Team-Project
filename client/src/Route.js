@@ -16,8 +16,8 @@ import OurServices from './components/OurServices';
 import NewPropertyForm from './components/NewPropertyForm'
 import NotFound from './components/NotFound'
 import Property from './components/Property';
-// import AdminPage from './components/Admin'
-// import BuyerPage from './components/Buyer'
+import AdminPage from './components/Admin'
+import BuyerPage from './components/Buyer'
 
 
 
@@ -69,7 +69,7 @@ const router = createBrowserRouter(
         errorElement={<ErrorBoundary />}
     />
 
-    {/* <Route
+    <Route
         path="/admin-page"
         element={<AdminPage />}
         errorElement={<ErrorBoundary />}
@@ -79,7 +79,7 @@ const router = createBrowserRouter(
         path="/buyer-page"
         element={<BuyerPage />}
         errorElement={<ErrorBoundary />}
-    /> */}
+    />
     <Route path="*" element={<NotFound />} errorElement={<ErrorBoundary />} />
     </>
     )
