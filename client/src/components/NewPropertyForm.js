@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import "./App3.css";
-import Header from './Header';
-import Footer from './Footer';
 
 function NewPropertyForm() {
     // Initializing form data state to match the Property model schema
@@ -117,7 +115,7 @@ function NewPropertyForm() {
 
     return (
     <>
-    <Header/>
+
         <div className="form-container">
             <h2>Property Listing Form</h2>
             <form onSubmit={handleSubmit}>
@@ -254,7 +252,7 @@ function NewPropertyForm() {
                 </button>
             </form>
         </div>
-    <Footer/>
+
     </>
     );
 }
