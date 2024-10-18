@@ -1,6 +1,7 @@
 import React from 'react';
 import NavMenu from './NavMenu';
 import Footer from './Footer';
+import { Link } from 'react-router-dom';
 import ImageSrc from './Images/pexels-robertkso-20296315.jpg'; 
 
 function Home() {
@@ -15,11 +16,24 @@ function Home() {
               alt="Modern cityscape with tall buildings"
               style={styles.image}
             />
+
             <div style={styles.overlay}>
               <h1 style={styles.headline}>Find Your Dream Home</h1>
               <p style={styles.subheadline}>
                 "Home is where love resides, memories are created, friends always belong, and laughter never ends."
               </p>
+              <div style={styles.navRight}>
+                
+                    <button style={styles.buttonOutline}>
+                        <Link to="/login" className="text-white text-lg hover:underline">Login</Link>
+                    </button>
+
+                    <button style={styles.buttonOutline}>
+                        <Link to="/register" className="text-white text-lg hover:underline">Register</Link>
+                    </button>
+
+            
+            </div>
             </div>
           </div>
         </main>
@@ -76,6 +90,31 @@ const styles = {
     fontSize: '18px',
     marginTop: '10px',
     maxWidth: '600px',
+  },
+  button: {
+    backgroundColor: '#007bff',
+    color: '#fff',
+    border: 'none',
+    padding: '10px 20px',
+    borderRadius: '5px',
+    cursor: 'pointer',
+  },
+  buttonOutline: {
+    backgroundColor: 'transparent',
+    color: '#fff',
+    border: '1px solid #fff',
+    padding: '10px 20px',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    ':hover': {
+        backgroundColor: '##007bff',
+    },
+  },
+
+  navRight: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '20px',
   },
 };
 

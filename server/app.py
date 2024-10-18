@@ -19,12 +19,18 @@ def allow(*roles):
     def wrapper(fn):
         @wraps(fn)
         def decorator(*args, **kwargs):  
-            user_roles = [role.user_role for role in current_user.roles]
-            for user_role in user_roles:
-                if user_role in roles:
-                    return fn(*args, **kwargs)
+            # Check if current_user is authenticated
+            if not current_user.is_authenticated:
+                return {"msg": "Not Authorized!"}, 403
+            
+            # Retrieve the user's role from the current_user object
+            user_role = current_user.user_role  
+            
+            # Check if the user_role is in the allowed roles
+            if user_role in roles:
+                return fn(*args, **kwargs)
             else:
-                return {"msg":"Not Authorized !"}, 403
+                return {"msg": "Not Authorized!"}, 403
 
         return decorator
 
@@ -136,6 +142,8 @@ class PropertyById(Resource):
             return response
 
     #  a method to update a property
+    @jwt_required()
+    @allow("admin")
     def patch(self, id):
         # querying and filtering the database using the id
         property1 = Property.query.filter_by(id = id).first()
@@ -159,6 +167,8 @@ class PropertyById(Resource):
             return response
 
     #  a method to delete the property
+    @jwt_required()
+    @allow("admin")
     def delete(self, id):
         # querying and filtering the database using the id
         property1 = Property.query.filter_by(id = id).first()
