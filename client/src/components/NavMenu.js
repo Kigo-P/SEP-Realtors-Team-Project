@@ -16,13 +16,7 @@ function NavMenu() {
                         <Link to="/listing" className="text-white text-lg hover:underline">Properties</Link>
                     </li>
                     <li>
-                        <Link to="/register" className="text-white text-lg hover:underline">Register</Link>
-                    </li>
-                    <li>
                         <Link to="/our-services" className="text-white text-lg hover:underline">Our Services</Link>
-                    </li>
-                    <li>
-                        <Link to="/login" className="text-white text-lg hover:underline">Login</Link>
                     </li>
                     <li>
                         <Link to="/about-us" className="text-white text-lg hover:underline">About Us</Link>
