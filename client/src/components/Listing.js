@@ -6,7 +6,6 @@ const Listing = ({ comparison = false, property = '' }) => {
     const [filteredProperties, setFilteredProperties] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [filters, setFilters] = useState({
-        bedrooms: '',
         location: '',
         minPrice: '',
         maxPrice: '',
@@ -36,14 +35,13 @@ const Listing = ({ comparison = false, property = '' }) => {
 
     useEffect(() => {
         const filtered = properties.filter(property => {
-            const matchesBedrooms = filters.bedrooms ? property.features.bedrooms === parseInt(filters.bedrooms) : true;
             const matchesLocation = filters.location ? property.location.toLowerCase().includes(filters.location.toLowerCase()) : true;
             const matchesMinPrice = filters.minPrice ? property.price >= parseFloat(filters.minPrice) : true;
             const matchesMaxPrice = filters.maxPrice ? property.price <= parseFloat(filters.maxPrice) : true;
             const matchesPropertyType = filters.propertyType ? property.type === filters.propertyType : true;
             const matchesSearchTerm = property.title.toLowerCase().includes(searchTerm.toLowerCase());
 
-            return matchesBedrooms && matchesLocation && matchesMinPrice && matchesMaxPrice && matchesPropertyType && matchesSearchTerm;
+            return matchesLocation && matchesMinPrice && matchesMaxPrice && matchesPropertyType && matchesSearchTerm;
         });
 
         setFilteredProperties(filtered);
@@ -81,7 +79,6 @@ const Listing = ({ comparison = false, property = '' }) => {
                                         <h2>{item.title}</h2>
                                         <p className="price">{item.price}</p>
                                         <div className="features">
-                                            <span>{item.features.bedrooms} Bedrooms</span>
                                             <span>{item.location}</span>
                                             <span>{item.type}</span>
                                         </div>
