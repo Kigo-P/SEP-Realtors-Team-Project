@@ -128,7 +128,7 @@ class Property(db.Model, SerializerMixin):
     
 
 #  creating a Feature Model
-class Feature(db.Model):
+class Feature(db.Model, SerializerMixin):
     __tablename__ = "features"
 
     # creating columns
@@ -140,10 +140,17 @@ class Feature(db.Model):
     #  a relationship that maps the features to the property
     property1 = db.relationship("Property", back_populates="features") 
 
+    # setting serialization rules
+    serialize_rules = ("-property1.features",  )
+
+    #  creating a string version using repr
+    def __repr__(self):
+        return f"<Feature {self.id}: {self.name},has been added>"
+
     pass
 
 #  creating an Image Model
-class Image(db.Model):
+class Image(db.Model, SerializerMixin):
     __tablename__ = "images"
 
     # creating columns
@@ -155,10 +162,17 @@ class Image(db.Model):
     #  a relationship that maps the features to the property
     property1 = db.relationship("Property", back_populates="images") 
 
+    # setting serialization rules
+    serialize_rules = ("-property1.images",  )
+
+    #  creating a string version using repr
+    def __repr__(self):
+        return f"<Image {self.id}: {self.name},has been added>"
+
     pass
 
 #  creating an Infrastructure Model
-class Infrastructure(db.Model):
+class Infrastructure(db.Model, SerializerMixin):
     __tablename__ = "infrastructures"
 
     # creating columns
@@ -169,6 +183,13 @@ class Infrastructure(db.Model):
 
     #  a relationship that maps the features to the property
     property1 = db.relationship("Property", back_populates="infrastructures") 
+
+    # setting serialization rules
+    serialize_rules = ("-property1.infrastructures",  )
+
+    #  creating a string version using repr
+    def __repr__(self):
+        return f"<Infrastructure {self.id}: {self.name},has been added>"
 
     pass
 

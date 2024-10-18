@@ -1,75 +1,91 @@
-import React, { useState, useEffect } from 'react'
-import "./App3.css"
+import React, { useState, useEffect } from 'react';
+import "./App3.css";
 
 function NewPropertyForm() {
-    // setting the use state of the initial from to be an empty string
+    // Initializing form data state to match the Property model schema
     const [formData, setFormData] = useState({
         title: '',
         description: '',
-        images: [], 
         price: '',
         location: '',
-        infrastructure: '',
-        features: {
-            bedrooms: '0',
-            washrooms: '1',
-            powderRooms: 'No',
-        },
         propertyType: '',
-        additionalFeatures: [], 
+        features: [], // Array to hold features for the property
+        images: [], // Array to hold image URLs for the property
+        infrastructures: [], // Array to hold infrastructure details for the property
     });
-    
+
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    //  creating a function called handle change that detects the changes on the input fields
+    // Function to handle input changes for basic property details
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevState => ({
             ...prevState,
-            [name]: name === 'price' ? Math.max(0, Number(value)).toString() : value
+            [name]: name === 'price' ? Math.max(0, Number(value)).toString() : value // Ensure price is a non-negative number
         }));
     };
 
-    //  creating a function called handleImageChange that detects the changes on the input fields for the image
+    // Function to handle changes to feature inputs
+    const handleFeatureChange = (index, value) => {
+        const newFeatures = [...formData.features];
+        newFeatures[index] = { name: value }; // Update feature name
+        setFormData(prevState => ({
+            ...prevState,
+            features: newFeatures
+        }));
+    };
+
+    // Function to handle changes to image URL inputs
     const handleImageChange = (index, value) => {
         const newImages = [...formData.images];
-        newImages[index] = value;
+        newImages[index] = { name: value }; // Update image URL
         setFormData(prevState => ({
             ...prevState,
             images: newImages
         }));
     };
 
-    //  creating a function called handleFeatureChange that detects the changes on the input fields
-    const handleFeatureChange = (index, value) => {
-        const newFeatures = [...formData.additionalFeatures];
-        newFeatures[index] = value;
+    // Function to handle changes to infrastructure inputs
+    const handleInfrastructureChange = (index, value) => {
+        const newInfrastructures = [...formData.infrastructures];
+        newInfrastructures[index] = { name: value }; // Update infrastructure name
         setFormData(prevState => ({
             ...prevState,
-            additionalFeatures: newFeatures
+            infrastructures: newInfrastructures
         }));
     };
 
-    const addImageField = () => {
-        setFormData(prevState => ({
-            ...prevState,
-            images: [...prevState.images, '']
-        }));
-    };
-
+    // Function to add a new feature input field
     const addFeatureField = () => {
         setFormData(prevState => ({
             ...prevState,
-            additionalFeatures: [...prevState.additionalFeatures, '']
+            features: [...prevState.features, { name: '' }] // Add a new feature object
         }));
     };
-    //  creating a function called handleSubmit that is responsible for submitting the form
+
+    // Function to add a new image URL input field
+    const addImageField = () => {
+        setFormData(prevState => ({
+            ...prevState,
+            images: [...prevState.images, { name: '' }] // Add a new image object
+        }));
+    };
+
+    // Function to add a new infrastructure input field
+    const addInfrastructureField = () => {
+        setFormData(prevState => ({
+            ...prevState,
+            infrastructures: [...prevState.infrastructures, { name: '' }] // Add a new infrastructure object
+        }));
+    };
+
+    // Function to handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
         setIsSubmitting(true);
     };
 
-    // using use effect to post data to the database
+    // Using useEffect to submit data to the backend when the form is being submitted
     useEffect(() => {
         if (isSubmitting) {
             const timer = setTimeout(() => {
@@ -78,7 +94,7 @@ function NewPropertyForm() {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify(formData),
+                    body: JSON.stringify(formData), // Send the structured form data
                 })
                 .then((r) => r.json())
                 .then((data) => {
@@ -96,11 +112,12 @@ function NewPropertyForm() {
             return () => clearTimeout(timer);
         }
     }, [isSubmitting, formData]);
-    
+
     return (
         <div className="form-container">
             <h2>Property Listing Form</h2>
             <form onSubmit={handleSubmit}>
+                {/* Title, Description, Price, Location, Property Type Fields */}
                 <div className="form-group">
                     <label htmlFor="title">Title <span className="required-star">*</span></label>
                     <input
@@ -125,104 +142,28 @@ function NewPropertyForm() {
                 </div>
 
                 <div className="form-group">
-                    <label>Add Image URLs <span className="required-star">*</span></label>
-                    {formData.images.map((image, index) => (
-                        <div key={index} className="image-url-group">
-                            <input
-                                type="url"
-                                value={image}
-                                onChange={(e) => handleImageChange(index, e.target.value)}
-                                required
-                            />
-                        </div>
-                    ))}
-                    <button type="button" onClick={addImageField} style={{ marginTop: '10px' }}>
-                        Add Another Image URL
-                    </button>
-                </div>
-
-                <div className="form-row">
-                    <div className="form-group">
-                        <label htmlFor="price">Price <span className="required-star">*</span></label>
-                        <input
-                            type="number"
-                            id="price"
-                            name="price"
-                            value={formData.price}
-                            onChange={handleChange}
-                            min="0"
-                            required
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="location">Location <span className="required-star">*</span></label>
-                        <input
-                            type="text"
-                            id="location"
-                            name="location"
-                            value={formData.location}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="infrastructure">Infrastructure <span className="required-star">*</span></label>
+                    <label htmlFor="price">Price <span className="required-star">*</span></label>
                     <input
-                        type="text"
-                        id="infrastructure"
-                        name="infrastructure"
-                        value={formData.infrastructure}
+                        type="number"
+                        id="price"
+                        name="price"
+                        value={formData.price}
                         onChange={handleChange}
+                        min="0"
                         required
                     />
                 </div>
 
                 <div className="form-group">
-                    <label>Features</label>
-                    <div className="form-row">
-                        <div className="form-group">
-                            <label htmlFor="bedrooms">Bedrooms <span className="required-star">*</span></label>
-                            <input
-                                type="number"
-                                id="bedrooms"
-                                name="bedrooms"
-                                value={formData.features.bedrooms}
-                                onChange={(e) => handleFeatureChange('bedrooms', e.target.value)}
-                                min="0"
-                                required
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label htmlFor="washrooms">Washrooms <span className="required-star">*</span></label>
-                            <input
-                                type="number"
-                                id="washrooms"
-                                name="washrooms"
-                                value={formData.features.washrooms}
-                                onChange={(e) => handleFeatureChange('washrooms', e.target.value)}
-                                min="0"
-                                required
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label htmlFor="powderRooms">Powder Rooms <span className="required-star">*</span></label>
-                            <select
-                                id="powderRooms"
-                                name="powderRooms"
-                                value={formData.features.powderRooms}
-                                onChange={(e) => handleFeatureChange('powderRooms', e.target.value)}
-                                required
-                            >
-                                <option value="No">No</option>
-                                <option value="Yes">Yes</option>
-                            </select>
-                        </div>
-                    </div>
+                    <label htmlFor="location">Location <span className="required-star">*</span></label>
+                    <input
+                        type="text"
+                        id="location"
+                        name="location"
+                        value={formData.location}
+                        onChange={handleChange}
+                        required
+                    />
                 </div>
 
                 <div className="form-group">
@@ -247,19 +188,60 @@ function NewPropertyForm() {
                     </select>
                 </div>
 
+                {/* Features Section */}
                 <div className="form-group">
-                    <label>Additional Features</label>
-                    {formData.additionalFeatures.map((feature, index) => (
+                    <label>Features <span className="required-star">*</span></label>
+                    {formData.features.map((feature, index) => (
                         <div key={index} className="feature-group">
                             <input
                                 type="text"
-                                value={feature}
+                                value={feature.name}
                                 onChange={(e) => handleFeatureChange(index, e.target.value)}
+                                placeholder="Feature Name"
+                                required
                             />
                         </div>
                     ))}
-                    <button type="button" onClick={addFeatureField} style={{ marginTop: '10px' }}>
-                        Add Another Feature
+                    <button type="button" onClick={addFeatureField} style={{ marginTop: '10px', padding: '5px' }}>
+                        + Add Feature
+                    </button>
+                </div>
+
+                {/* Images Section */}
+                <div className="form-group">
+                    <label>Add Image URLs <span className="required-star">*</span></label>
+                    {formData.images.map((image, index) => (
+                        <div key={index} className="image-url-group">
+                            <input
+                                type="url"
+                                value={image.name}
+                                onChange={(e) => handleImageChange(index, e.target.value)}
+                                placeholder="Image URL"
+                                required
+                            />
+                        </div>
+                    ))}
+                    <button type="button" onClick={addImageField} style={{ marginTop: '10px', padding: '5px' }}>
+                        + Add Image URL
+                    </button>
+                </div>
+
+                {/* Infrastructures Section */}
+                <div className="form-group">
+                    <label>Infrastructures <span className="required-star">*</span></label>
+                    {formData.infrastructures.map((infra, index) => (
+                        <div key={index} className="infrastructure-group">
+                            <input
+                                type="text"
+                                value={infra.name}
+                                onChange={(e) => handleInfrastructureChange(index, e.target.value)}
+                                placeholder="Infrastructure Name"
+                                required
+                            />
+                        </div>
+                    ))}
+                    <button type="button" onClick={addInfrastructureField} style={{ marginTop: '10px', padding: '5px' }}>
+                        + Add Infrastructure
                     </button>
                 </div>
 
@@ -271,5 +253,4 @@ function NewPropertyForm() {
     );
 }
 
-
-export default NewPropertyForm
+export default NewPropertyForm;
