@@ -1,4 +1,6 @@
 import React from 'react'
+import Header from './Header'
+import Footer from './Footer'
 
 function OurServices() {
 // Services Data including the images, title and description
@@ -81,7 +83,7 @@ bio: 'Joy has a deep understanding of the local market and provides personalized
 
 return (
 <>
-
+    <Header/>
     <div style={styles.container}>
     <h1 style={styles.title}>Our Services</h1>
     <div style={styles.cardsContainer}>
@@ -127,7 +129,7 @@ return (
         ))}
     </div>
     </div>
-
+    <Footer/>
 </>
 )
 }
