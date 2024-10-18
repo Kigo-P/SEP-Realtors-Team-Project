@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from './Header';
+import NavMenu from './NavMenu';
 import Footer from './Footer';
 import ImageSrc from './Images/pexels-robertkso-20296315.jpg'; 
 
@@ -7,7 +7,7 @@ function Home() {
   return (
     <>
       <div style={styles.container}>
-        <Header />
+        <NavMenu />
         <main style={styles.mainContent}>
           <div style={styles.imageContainer}>
             <img
@@ -44,7 +44,7 @@ const styles = {
   },
   imageContainer: {
     width: '100%',
-    height: '500px', // adjust height as needed
+    height: '800px',
     position: 'relative',
     overflow: 'hidden',
   },

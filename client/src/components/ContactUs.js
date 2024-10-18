@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Header from './Header';
 import Footer from './Footer';
+import NavMenu from './NavMenu';
 
 function ContactUs() {
   const [formData, setFormData] = useState({
@@ -26,7 +26,7 @@ function ContactUs() {
 
   return (
     <>
-      <Header />
+      <NavMenu />
       <div style={{ padding: '40px 0', background: 'linear-gradient(to right, #1e3c72, #ff5f6d)', color: '#fff', textAlign: 'center' }}>
         <h1 style={{ margin: '0', fontSize: '3rem' }}>Contact Us</h1>
       </div>

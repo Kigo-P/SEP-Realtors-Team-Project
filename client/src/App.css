@@ -1,4 +1,4 @@
-body {
+/* body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     padding: 20px;
@@ -105,7 +105,7 @@ body {
   font-size: 1.2rem;
 }
 
-/* Styling for the "Go Back Home" button */
+Styling for the "Go Back Home" button */
 .home-button {
   padding: 10px 20px;
   background-color: #137b33;
@@ -156,3 +156,7 @@ body {
   background-color: #0f6229;
 }
 
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

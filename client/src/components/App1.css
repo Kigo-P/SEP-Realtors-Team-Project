@@ -205,24 +205,27 @@ background-color: #0056b3;
     margin-top: 0;
 }
 }
-/* Footer styles */
+/* Footer styles
 .footer {
+position: ;
+width: 100%;
+margin-top: auto;
 background-color: #2d2d2d;
 color: white;
 padding: 20px;
 text-align: center;
-}
+} */
 
-.container {
+/* .container {
 display: flex;
 flex-direction: column;
 align-items: center;
 gap: 20px;
-}
+} */
 
-.section {
+/* .section {
 margin-bottom: 20px;
-}
+} */
 
 .title {
 font-size: 18px;

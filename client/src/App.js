@@ -1,12 +1,14 @@
+import React from 'react';
 import './App.css';
-import Route from './Route';
+import Routes from './route';
 
 function App() {
-  return (
-  <>
-  <Route></Route>
-  </>
-  )
+    return (
+        <>
+        <Routes />
+       
+        </>
+    );
 }
 
 export default App;
